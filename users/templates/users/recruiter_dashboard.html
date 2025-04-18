@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Recruiter Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Welcome, {{ user.recruiter_profile.company_name }}</h1>
+    
+    <h2>Your Internships</h2>
+    <a href="{% url 'internship-create' %}" class="button">Create New Internship</a>
+    
+    <ul>
+        {% for internship in user.internships.all %}
+            <li>
+                <a href="{% url 'internship-detail' internship.id %}">
+                    {{ internship.title }}
+                </a>
+                - Applications: {{ internship.applications.count }}
+            </li>
+        {% empty %}
+            <li>No internships posted yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

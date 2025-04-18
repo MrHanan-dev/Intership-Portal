@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Welcome, {{ user.username }}</h1>
+        <div class="profile-section">
+            <div class="profile-info">
+                <h3>Your Profile</h3>
+                <p><strong>University:</strong> {{ user.student_profile.university }}</p>
+                <p><strong>Major:</strong> {{ user.student_profile.major }}</p>
+                <p><strong>Graduation Year:</strong> {{ user.student_profile.graduation_year }}</p>
+               
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="applications-section">
+            <h2>Your Applications</h2>
+            
+            {% if user.applications.all %}
+            <div class="applications-list">
+                {% for application in user.applications.all %}
+                <div class="application-card {% if application.status == 'accepted' %}status-accepted{% elif application.status == 'rejected' %}status-rejected{% else %}status-pending{% endif %}">
+                    <div class="application-header">
+                        <h3>
+                            <a href="{% url 'internship-detail' application.internship.id %}">
+                                {{ application.internship.title }}
+                            </a>
+                        </h3>
+                        <span class="status-badge">{{ application.get_status_display }}</span>
+                    </div>
+                    <div class="application-details">
+                        <p><strong>Company:</strong> {{ application.internship.company }}</p>
+                        <p><strong>Applied on:</strong> {{ application.applied_at|date:"F d, Y" }}</p>
+                        <p><strong>Deadline:</strong> {{ application.internship.application_deadline|date:"F d, Y" }}</p>
+                    </div>
+                    <div class="application-actions">
+                        
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-applications">
+                <p>You haven't applied to any internships yet.</p>
+                <a href="{% url 'internship-list' %}" class="btn btn-primary">Browse Internships</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="recommendations-section">
+            <h2>Recommended Internships</h2>
+            {% if recommended_internships %}
+            <div class="internship-list">
+                {% for internship in recommended_internships %}
+                <div class="internship-card">
+                    <h3>
+                        <a href="{% url 'internship-detail' internship.id %}">
+                            {{ internship.title }}
+                        </a>
+                    </h3>
+                    <p class="company">{{ internship.company }}</p>
+                    <p class="location">{{ internship.location }}</p>
+                    <p class="deadline">Apply by: {{ internship.application_deadline|date:"F d, Y" }}</p>
+                    <div class="internship-actions">
+                        <a href="{% url 'internship-detail' internship.id %}" class="btn btn-view">View Details</a>
+                        <a href="{% url 'internship-apply' internship.id %}" class="btn btn-apply">Apply Now</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-recommendations">
+                <p>No recommendations available based on your profile.</p>
+                <a href="{% url 'internship-list' %}" class="btn btn-primary">Browse All Internships</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .dashboard-header {
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+    }
+
+    .profile-section {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    .profile-info p {
+        margin: 8px 0;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 8px 16px;
+        margin: 5px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .btn-primary {
+        background: #3498db;
+        color: white;
+    }
+
+    .btn-edit {
+        background: #f39c12;
+        color: white;
+    }
+
+    .btn-view {
+        background: #3498db;
+        color: white;
+    }
+
+    .btn-withdraw {
+        background: #e74c3c;
+        color: white;
+    }
+
+    .btn-apply {
+        background: #2ecc71;
+        color: white;
+    }
+
+    .application-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .status-accepted {
+        border-left: 5px solid #2ecc71;
+    }
+
+    .status-rejected {
+        border-left: 5px solid #e74c3c;
+    }
+
+    .status-pending {
+        border-left: 5px solid #f39c12;
+    }
+
+    .status-badge {
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.8em;
+        font-weight: bold;
+    }
+
+    .application-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .application-details p {
+        margin: 5px 0;
+        color: #555;
+    }
+
+    .application-actions {
+        margin-top: 10px;
+    }
+
+    .internship-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .internship-actions {
+        margin-top: 10px;
+    }
+
+    .no-applications, .no-recommendations {
+        text-align: center;
+        padding: 30px;
+        background: #f9f9f9;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

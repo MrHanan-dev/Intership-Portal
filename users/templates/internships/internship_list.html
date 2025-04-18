@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Internships List{% endblock %}
+
+{% block content %}
+    <h1>Available Internships</h1>
+    
+    <ul class="internship-list">
+        {% for internship in internships %}
+            <li class="internship-item">
+                <h3>
+                    <a href="{% url 'internship-detail' internship.id %}">
+                        {{ internship.title }}
+                    </a>
+                </h3>
+                <p class="company">{{ internship.company }}</p>
+                <p class="location">{{ internship.location }}</p>
+                <p class="deadline">Apply by: {{ internship.application_deadline }}</p>
+            </li>
+        {% empty %}
+            <li>No internships available at the moment.</li>
+        {% endfor %}
+    </ul>
+    
+    {% if user.is_recruiter or user.is_admin %}
+        <a href="{% url 'internship-create' %}" class="button">Post New Internship</a>
+    {% endif %}
+{% endblock %}

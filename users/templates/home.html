@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Internship Portal{% endblock %}
+
+{% block content %}
+    <h1>Welcome to the Internship Portal</h1>
+    <p>The best place to find and manage internship opportunities.</p>
+    
+    <div class="content">
+        <h2>About Us</h2>
+        <p>Our internship portal connects students with top companies for internship opportunities.</p>
+        
+        <h2>For Students</h2>
+        <p>Find and apply to internships that match your skills and interests.</p>
+        
+        <h2>For Recruiters</h2>
+        <p>Post internship opportunities and find talented students for your company.</p>
+        
+        <div class="cta">
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}">Go to Dashboard</a>
+            {% else %}
+                <a href="{% url 'signup' %}">Sign Up</a>
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

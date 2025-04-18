@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Welcome, Admin</h1>
+    
+    <div class="dashboard-section">
+        <h2>Manage Users</h2>
+        <a href="{% url 'recruiter-list' %}" class="button">View Recruiters</a>
+    </div>
+    
+    <div class="dashboard-section">
+        <h2>Manage Internships</h2>
+        <a href="{% url 'internship-list' %}" class="button">View All Internships</a>
+    </div>
+{% endblock %}

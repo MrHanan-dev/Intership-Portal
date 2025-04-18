@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ internship.title }}{% endblock %}
+
+{% block content %}
+    <article class="internship-detail">
+        <h1>{{ internship.title }}</h1>
+        <p class="company">{{ internship.company }}</p>
+        <p class="location">{{ internship.location }}</p>
+        <p class="deadline">Application Deadline: {{ internship.application_deadline }}</p>
+        <div class="description">
+            {{ internship.description|linebreaks }}
+        </div>
+        
+        <div class="actions">
+            {% if user.is_student %}
+                <a href="{% url 'internship-apply' internship.id %}" class="button">
+                    Apply Now
+                </a>
+            {% endif %}
+            
+            {% if user == internship.recruiter or user.is_admin %}
+                <a href="{% url 'internship-edit' internship.id %}" class="button">
+                    Edit Internship
+                </a>
+            {% endif %}
+        </div>
+        
+        {% if user == internship.recruiter or user.is_admin %}
+            <section class="applications">
+                <h2>Applications ({{ internship.applications.count }})</h2>
+                <ul>
+                    {% for application in internship.applications.all %}
+                        <li class="application-item">
+                            <h3>{{ application.student.username }}</h3>
+                            <p>Status: {{ application.get_status_display }}</p>
+                            <p>Applied: {{ application.applied_at|date }}</p>
+                        </li>
+                    {% empty %}
+                        <li>No applications received yet.</li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endif %}
+    </article>
+{% endblock %}
+

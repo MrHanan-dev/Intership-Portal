@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ recruiter.recruiter_profile.company_name }}{% endblock %}
+
+{% block content %}
+    <article class="recruiter-detail">
+        <h1>{{ recruiter.recruiter_profile.company_name }}</h1>
+        
+        <div class="company-info">
+            <p class="location">{{ recruiter.recruiter_profile.location }}</p>
+            <p class="website">
+                <a href="{{ recruiter.recruiter_profile.website }}" target="_blank">
+                    Visit Website
+                </a>
+            </p>
+            <div class="description">
+                {{ recruiter.recruiter_profile.company_description|linebreaks }}
+            </div>
+        </div>
+        
+        {% if user.is_admin %}
+            <div class="actions">
+                <a href="{% url 'recruiter-edit' recruiter.recruiter_profile.id %}" class="button">
+                    Edit Profile
+                </a>
+            </div>
+        {% endif %}
+    </article>
+{% endblock %}

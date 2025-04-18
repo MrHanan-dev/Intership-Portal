@@ -1,0 +1,99 @@
+<!-- templates/users/signup.html -->
+{% extends 'base.html' %}
+
+{% block title %}Sign Up - Internship Portal{% endblock %}
+
+{% block content %}
+<h1>Sign Up</h1>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <label for="{{ form.username.id_for_label }}">Username:</label>
+    {{ form.username }}
+    {{ form.username.errors }}
+
+    <label for="{{ form.email.id_for_label }}">Email:</label>
+    {{ form.email }}
+    {{ form.email.errors }}
+
+    <label for="{{ form.password1.id_for_label }}">Password:</label>
+    {{ form.password1 }}
+    {{ form.password1.errors }}
+
+    <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+    {{ form.password2 }}
+    {{ form.password2.errors }}
+
+    <label for="{{ form.role.id_for_label }}">Role:</label>
+    {{ form.role }}
+    {{ form.role.errors }}
+
+    <!-- Student Fields -->
+    <div id="student-fields" style="display: none;">
+        <h3>Student Information</h3>
+
+        <label for="{{ form.university.id_for_label }}">University:</label>
+        {{ form.university }}
+        {{ form.university.errors }}
+
+        <label for="{{ form.major.id_for_label }}">Major:</label>
+        {{ form.major }}
+        {{ form.major.errors }}
+
+        <label for="{{ form.graduation_year.id_for_label }}">Graduation Year:</label>
+        {{ form.graduation_year }}
+        {{ form.graduation_year.errors }}
+    </div>
+
+    <!-- Recruiter Fields -->
+    <div id="recruiter-fields" style="display: none;">
+        <h3>Recruiter Information</h3>
+
+        <label for="{{ form.company_name.id_for_label }}">Company Name:</label>
+        {{ form.company_name }}
+        {{ form.company_name.errors }}
+
+        <label for="{{ form.company_description.id_for_label }}">Company Description:</label>
+        {{ form.company_description }}
+        {{ form.company_description.errors }}
+
+        <label for="{{ form.website.id_for_label }}">Website:</label>
+        {{ form.website }}
+        {{ form.website.errors }}
+
+        <label for="{{ form.location.id_for_label }}">Location:</label>
+        {{ form.location }}
+        {{ form.location.errors }}
+    </div>
+
+    <button type="submit">Sign Up</button>
+</form>
+
+<p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleSelect = document.querySelector('#id_role');
+        const studentFields = document.getElementById('student-fields');
+        const recruiterFields = document.getElementById('recruiter-fields');
+
+        function toggleFields() {
+            const value = roleSelect.value;
+            studentFields.style.display = 'none';
+            recruiterFields.style.display = 'none';
+
+            if (value === 'student') {
+                studentFields.style.display = 'block';
+            } else if (value === 'recruiter') {
+                recruiterFields.style.display = 'block';
+            }
+        }
+
+        toggleFields();
+        roleSelect.addEventListener('change', toggleFields);
+    });
+</script>
+{% endblock %}

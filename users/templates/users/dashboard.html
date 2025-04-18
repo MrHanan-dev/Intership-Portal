@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Welcome, {{ user.username }}</h1>
+    
+    <h2>Your Applications</h2>
+    <ul>
+        {% for application in user.applications.all %}
+            <li>
+                <a href="{% url 'internship-detail' application.internship.id %}">
+                    {{ application.internship.title }}
+                </a>
+                - Status: {{ application.get_status_display }}
+            </li>
+        {% empty %}
+            <li>No applications submitted yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
